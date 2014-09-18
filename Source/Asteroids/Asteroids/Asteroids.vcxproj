@@ -39,12 +39,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)..\..\Build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\..\BuildIntermediate\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\..\BuildIntermediate\$(ProjectName)\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)\Intermediate\</IntDir>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)..\..\Build\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)..\..\BuildIntermediate\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)..\..\BuildIntermediate\$(ProjectName)\$(Configuration)\</OutDir>
+    <IntDir>$(OutDir)\Intermediate\</IntDir>
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -55,12 +56,34 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(SolutionDir)..\External\SFML\v2.1\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4514;4710;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <EnablePREfast>true</EnablePREfast>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)..\External\SFML\v2.1\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /d /y "$(TargetPath)" "$(SolutionDir)..\..\Build\$(Configuration)\"
+
+For %%a in (
+  "$(SolutionDir)..\External\SFML\v2.1\bin\sfml-system-d-2.dll"
+  "$(SolutionDir)..\External\SFML\v2.1\bin\sfml-window-d-2.dll"
+  "$(SolutionDir)..\External\SFML\v2.1\bin\sfml-graphics-d-2.dll"
+) do (
+  xcopy /d /y "%%~a" "$(SolutionDir)..\..\Build\$(Configuration)\"
+)
+</Command>
+      <Message>Copy target and SFML DLLs to Build.</Message>
+    </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>
+      </Message>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -81,6 +104,25 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\External\SFML\v2.1\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /d /y "$(TargetPath)" "$(SolutionDir)..\..\Build\$(Configuration)\"
+
+For %%a in (
+  "$(SolutionDir)..\External\SFML\v2.1\bin\sfml-system-2.dll"
+  "$(SolutionDir)..\External\SFML\v2.1\bin\sfml-window-2.dll"
+  "$(SolutionDir)..\External\SFML\v2.1\bin\sfml-graphics-2.dll"
+) do (
+  xcopy /d /y "%%~a" "$(SolutionDir)..\..\Build\$(Configuration)\"
+)
+</Command>
+      <Message>Copy target and SFML DLLs to Build.</Message>
+    </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
