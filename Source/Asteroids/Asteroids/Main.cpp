@@ -1,6 +1,6 @@
 #include "AsteroidsPCH.h"
 
-#include "ParticleEmitter.h"
+#include "ParticleSystem.h"
 #include "Time.h"
 #include <iostream>
 
