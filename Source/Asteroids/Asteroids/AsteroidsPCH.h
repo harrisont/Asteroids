@@ -4,3 +4,8 @@
 #pragma warning(disable : 4350)
 #include <SFML/Graphics.hpp>
 #pragma warning(pop)
+
+#include <assert.h>
+#include <chrono>
+#include <functional>
+#include <iostream>

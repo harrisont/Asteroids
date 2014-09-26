@@ -4,10 +4,12 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="AsteroidsPCH.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="ParticleEmitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AsteroidsPCH.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Time.h" />
+    <ClInclude Include="ParticleEmitter.h" />
   </ItemGroup>
 </Project>

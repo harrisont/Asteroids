@@ -1,29 +1,29 @@
 #pragma once
 
-#include <chrono>
+struct Particle
+{
+    sf::Vector2f deltaPositionPerSecond;
+    std::chrono::microseconds totalDuration;
+    std::chrono::microseconds remainingDuration;
+};
 
-class ParticleSystem : public sf::Drawable
+class ParticleSystem
 {
 public:
     ParticleSystem(unsigned int numParticles);
+    ParticleSystem(ParticleSystem&) = delete;
+    ParticleSystem& operator=(ParticleSystem&) = delete;
 
-    void Update(const std::chrono::microseconds elapsedTime);
-    //void AddParticle(const sf::Vector2f position, const sf::Vector2f deltaPositionPerSecond, const std::chrono::milliseconds duration);
-    void SetPosition(sf::Vector2f position);
-    unsigned int GetNumParticles() const { return mParticles.size(); };
+    void Update(
+        const std::chrono::microseconds elapsedTime,
+        std::function<void(Particle&, sf::Vertex&)> resetParticleFunc,
+        std::function<void(const std::chrono::microseconds, Particle&, sf::Vertex&)> updateParticleFunc);
+
+    const std::vector<sf::Vertex>& GetParticlePositions() const { return mParticlePositions; };
 
 private:
-    struct Particle
-    {
-        sf::Vector2f deltaPositionPerSecond;
-        std::chrono::microseconds totalDuration;
-        std::chrono::microseconds remainingDuration;
-    };
-
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-    void ResetParticle(Particle& particle, sf::Vertex& vertex);
-
     std::vector<Particle> mParticles;
     std::vector<sf::Vertex> mParticlePositions;
-    sf::Vector2f mPosition;
 };
+
+void DrawParticleSystem(const ParticleSystem& system, sf::RenderTarget& target, sf::RenderStates& states);
