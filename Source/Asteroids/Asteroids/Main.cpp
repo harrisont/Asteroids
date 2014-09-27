@@ -71,7 +71,7 @@ void Render(
     GameState& gameState,
     UiState& uiState,
     const std::chrono::microseconds lastRenderDuration,
-    const std::chrono::microseconds remainingUpdateTime)
+    const std::chrono::microseconds /*remainingUpdateTime*/)
 {
     uiState.renderDurationMovingAverage.AddSample(FloatSeconds(lastRenderDuration).count());
     const auto framesPerSecond = 1 / std::max(0.001f, uiState.renderDurationMovingAverage.Get());
