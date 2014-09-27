@@ -16,6 +16,36 @@ struct GameState
     GameState& operator=(GameState&) = delete;
 };
 
+sf::Font LoadFont(const std::string& fontPath)
+{
+    sf::Font font;
+    if (!font.loadFromFile(fontPath))
+    {
+        std::cerr << "Failed to load font: path=\"" << fontPath << "\"." << std::endl;
+    }
+    return font;
+}
+
+struct UiState
+{
+    sf::RenderWindow window;
+    sf::Font font = LoadFont("Fonts/consola.ttf");
+    sf::Text framesPerSecondText;
+
+    UiState()
+        : window(sf::VideoMode(800, 800), "Asteroids")
+    {
+        window.setVerticalSyncEnabled(true);
+
+        framesPerSecondText.setFont(font);
+        framesPerSecondText.setCharacterSize(24);
+        framesPerSecondText.setColor(sf::Color::White);
+    }
+
+    UiState(UiState&) = delete;
+    UiState& operator=(UiState&) = delete;
+};
+
 void ProcessWindowEvents(sf::RenderWindow& window, GameState& state)
 {
     sf::Event event;
@@ -34,11 +64,15 @@ void Update(GameState& state, std::chrono::microseconds elapsedTime)
     state.particleEmitter.Update(elapsedTime);
 }
 
-void Render(sf::RenderWindow& window, GameState& state)
+void Render(GameState& gameState, UiState& uiState, std::chrono::microseconds elapsedTimeSinceLastRender)
 {
-    window.clear();
-    window.draw(state.particleEmitter);
-    window.display();
+    const auto framesPerSecond = static_cast<int>(1 / std::max(0.001f, FloatSeconds(elapsedTimeSinceLastRender).count()));
+    uiState.framesPerSecondText.setString(std::to_string(framesPerSecond) + " FPS");
+
+    uiState.window.clear();
+    uiState.window.draw(gameState.particleEmitter);
+    uiState.window.draw(uiState.framesPerSecondText);
+    uiState.window.display();
 }
 
 int main(unsigned int /*argc*/, const char* /*argv*/[])
@@ -46,20 +80,19 @@ int main(unsigned int /*argc*/, const char* /*argv*/[])
     const unsigned int kNumParticles = 5000;
     GameState state{ kNumParticles };
 
-    sf::RenderWindow window(sf::VideoMode(800, 800), "Asteroids");
-    window.setVerticalSyncEnabled(true);
+    UiState uiState;
 
     auto previousTime = std::chrono::high_resolution_clock::now();
     std::chrono::microseconds remainingUpdateTime;
 
-    while (window.isOpen())
+    while (uiState.window.isOpen())
     {
         const auto currentTime = std::chrono::high_resolution_clock::now();
-        auto elapsedTime(std::chrono::duration_cast<std::chrono::microseconds>(currentTime - previousTime));
+        auto elapsedTimeSinceLastRender(std::chrono::duration_cast<std::chrono::microseconds>(currentTime - previousTime));
         previousTime = currentTime;
-        remainingUpdateTime += elapsedTime;
+        remainingUpdateTime += elapsedTimeSinceLastRender;
 
-        ProcessWindowEvents(window, state);
+        ProcessWindowEvents(uiState.window, state);
 
         const unsigned int kDesiredUdatesPerSecond = 60;
         const auto kUpdateStepDuration = std::chrono::microseconds(1000000) / kDesiredUdatesPerSecond;
@@ -80,11 +113,7 @@ int main(unsigned int /*argc*/, const char* /*argv*/[])
             }
         }
 
-        Render(window, state);
-
-        std::cout << kNumParticles << " particles"
-            << ", " << static_cast<int>(1 / std::max(0.001f, FloatSeconds(elapsedTime).count())) << " FPS"
-            << std::endl;
+        Render(state, uiState, elapsedTimeSinceLastRender);
     }
 
     return 0;

@@ -55,7 +55,7 @@
       <SDLCheck>true</SDLCheck>
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalIncludeDirectories>$(SolutionDir)..\External\SFML\v2.1\include</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4365;4514;4710;4711;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4365;4514;4710;4711;4820;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <EnablePREfast>true</EnablePREfast>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>AsteroidsPCH.h</PrecompiledHeaderFile>
@@ -73,10 +73,11 @@ For %%a in (
   "$(SolutionDir)..\External\SFML\v2.1\bin\sfml-window-d-2.dll"
   "$(SolutionDir)..\External\SFML\v2.1\bin\sfml-graphics-d-2.dll"
 ) do (
-  xcopy /d /y "%%~a" "$(SolutionDir)..\..\Build\$(Configuration)\"
+  xcopy /d /s /y "%%~a" "$(SolutionDir)..\..\Build\$(Configuration)\"
 )
-</Command>
-      <Message>Copy target and SFML DLLs to Build.</Message>
+
+xcopy /d /s /y "$(SolutionDir)..\Asteroids\Fonts" "$(SolutionDir)..\..\Build\$(Configuration)\Fonts\"</Command>
+      <Message>Copy files to Build.</Message>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -96,7 +97,7 @@ For %%a in (
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)..\External\SFML\v2.1\include</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <DisableSpecificWarnings>4365;4514;4710;4711;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4365;4514;4710;4711;4820;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <EnablePREfast>true</EnablePREfast>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>AsteroidsPCH.h</PrecompiledHeaderFile>
@@ -118,8 +119,9 @@ For %%a in (
 ) do (
   xcopy /d /y "%%~a" "$(SolutionDir)..\..\Build\$(Configuration)\"
 )
-</Command>
-      <Message>Copy target and SFML DLLs to Build.</Message>
+
+xcopy /d /s /y "$(SolutionDir)..\Asteroids\Fonts" "$(SolutionDir)..\..\Build\$(Configuration)\Fonts\"</Command>
+      <Message>Copy files to Build.</Message>
     </PostBuildEvent>
     <CustomBuildStep>
       <Command>
