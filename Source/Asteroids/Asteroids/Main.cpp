@@ -1,5 +1,6 @@
 #include "AsteroidsPCH.h"
 
+#include "ExponentialMovingAverage.h"
 #include "ParticleEmitter.h"
 #include "Time.h"
 
@@ -31,9 +32,11 @@ struct UiState
     sf::RenderWindow window;
     sf::Font font = LoadFont("Fonts/consola.ttf");
     sf::Text framesPerSecondText;
+    ExponentialMovingAverage renderDurationMovingAverage;
 
     UiState()
         : window(sf::VideoMode(800, 800), "Asteroids")
+        , renderDurationMovingAverage(0.1f /*decayRate*/)
     {
         window.setVerticalSyncEnabled(true);
 
@@ -64,10 +67,11 @@ void Update(GameState& state, std::chrono::microseconds elapsedTime)
     state.particleEmitter.Update(elapsedTime);
 }
 
-void Render(GameState& gameState, UiState& uiState, std::chrono::microseconds elapsedTimeSinceLastRender)
+void Render(GameState& gameState, UiState& uiState, std::chrono::microseconds lastRenderDuration)
 {
-    const auto framesPerSecond = static_cast<int>(1 / std::max(0.001f, FloatSeconds(elapsedTimeSinceLastRender).count()));
-    uiState.framesPerSecondText.setString(std::to_string(framesPerSecond) + " FPS");
+    uiState.renderDurationMovingAverage.AddSample(FloatSeconds(lastRenderDuration).count());
+    const auto framesPerSecond = 1 / std::max(0.001f, uiState.renderDurationMovingAverage.Get());
+    uiState.framesPerSecondText.setString(std::to_string(static_cast<unsigned int>(std::roundf(framesPerSecond))) + " FPS");
 
     uiState.window.clear();
     uiState.window.draw(gameState.particleEmitter);
@@ -88,23 +92,23 @@ int main(unsigned int /*argc*/, const char* /*argv*/[])
     while (uiState.window.isOpen())
     {
         const auto currentTime = std::chrono::high_resolution_clock::now();
-        auto elapsedTimeSinceLastRender(std::chrono::duration_cast<std::chrono::microseconds>(currentTime - previousTime));
+        auto lastRenderDuration(std::chrono::duration_cast<std::chrono::microseconds>(currentTime - previousTime));
         previousTime = currentTime;
-        remainingUpdateTime += elapsedTimeSinceLastRender;
+        remainingUpdateTime += lastRenderDuration;
 
         ProcessWindowEvents(uiState.window, state);
 
         const unsigned int kDesiredUdatesPerSecond = 60;
         const auto kUpdateStepDuration = std::chrono::microseconds(1000000) / kDesiredUdatesPerSecond;
-        unsigned int updateIterations = 0;
+        unsigned int updateIterationsPerformedThisFrame = 0;
         while (remainingUpdateTime >= kUpdateStepDuration)
         {
             Update(state, kUpdateStepDuration);
             remainingUpdateTime -= kUpdateStepDuration;
 
             // Ensure that we don't spiral out of control
-            ++updateIterations;
-            if (updateIterations > kDesiredUdatesPerSecond)
+            ++updateIterationsPerformedThisFrame;
+            if (updateIterationsPerformedThisFrame > kDesiredUdatesPerSecond)
             {
                 std::cerr << "Updates are "
                     << std::chrono::duration_cast<std::chrono::milliseconds>(remainingUpdateTime).count()
@@ -113,7 +117,7 @@ int main(unsigned int /*argc*/, const char* /*argv*/[])
             }
         }
 
-        Render(state, uiState, elapsedTimeSinceLastRender);
+        Render(state, uiState, lastRenderDuration);
     }
 
     return 0;

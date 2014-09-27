@@ -5,11 +5,13 @@
     <ClCompile Include="AsteroidsPCH.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="ParticleEmitter.cpp" />
+    <ClCompile Include="ExponentialMovingAverage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AsteroidsPCH.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="ParticleEmitter.h" />
+    <ClInclude Include="ExponentialMovingAverage.h" />
   </ItemGroup>
 </Project>
