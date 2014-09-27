@@ -3,10 +3,48 @@
 #include "ParticleEmitter.h"
 #include "Time.h"
 
+struct GameState
+{
+    ParticleEmitter particleEmitter;
+
+    GameState(unsigned int numParticles)
+        : particleEmitter(numParticles)
+    {
+    }
+
+    GameState(GameState&) = delete;
+    GameState& operator=(GameState&) = delete;
+};
+
+void ProcessWindowEvents(sf::RenderWindow& window, GameState& state)
+{
+    sf::Event event;
+    while (window.pollEvent(event))
+    {
+        if (event.type == sf::Event::Closed)
+            window.close();
+    }
+
+    sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+    state.particleEmitter.SetPosition(window.mapPixelToCoords(mousePosition));
+}
+
+void Update(GameState& state, std::chrono::microseconds elapsedTime)
+{
+    state.particleEmitter.Update(elapsedTime);
+}
+
+void Render(sf::RenderWindow& window, GameState& state)
+{
+    window.clear();
+    window.draw(state.particleEmitter);
+    window.display();
+}
+
 int main(unsigned int /*argc*/, const char* /*argv*/[])
 {
     const unsigned int kNumParticles = 10000;
-    ParticleEmitter particleEmitter(kNumParticles);
+    GameState state{ kNumParticles };
 
     sf::RenderWindow window(sf::VideoMode(800, 800), "Asteroids");
 
@@ -14,26 +52,15 @@ int main(unsigned int /*argc*/, const char* /*argv*/[])
 
     while (window.isOpen())
     {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-        particleEmitter.SetPosition(window.mapPixelToCoords(mousePosition));
+        ProcessWindowEvents(window, state);
 
         auto updateTime = std::chrono::high_resolution_clock::now();
         auto timeDelta = updateTime - previousUpdateTime;
         auto elapsedTime(std::chrono::duration_cast<std::chrono::microseconds>(timeDelta));
         previousUpdateTime = updateTime;
 
-        particleEmitter.Update(elapsedTime);
-
-        window.clear();
-        window.draw(particleEmitter);
-        window.display();
+        Update(state, elapsedTime);
+        Render(window, state);
 
         std::cout << kNumParticles << " particles"
             << ", " << static_cast<int>(1 / std::max(0.001f, FloatSeconds(elapsedTime).count())) << " FPS"
