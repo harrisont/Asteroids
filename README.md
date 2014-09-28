@@ -4,8 +4,10 @@ Top-down space shooter
 
 Dependencies
 ------------
-* SFML
+* SFML 2.1
 
 Building and Running
 --------------------
-* When running from Visual Studio, set the working directory to ```$(SolutionDir)..\..\Build\$(Configuration)\```
+* When running from Visual Studio:
+  * Set "Working Directory" to ```$(SolutionDir)..\..\Build\$(Configuration)\```
+  * Set "Command" to ```$(SolutionDir)..\..\Build\$(Configuration)\$(TargetFileName)```
