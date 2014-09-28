@@ -6,6 +6,9 @@
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="ParticleEmitter.cpp" />
     <ClCompile Include="ExponentialMovingAverage.cpp" />
+    <ClCompile Include="Ship.cpp" />
+    <ClCompile Include="ViewState.cpp" />
+    <ClCompile Include="GameState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AsteroidsPCH.h" />
@@ -13,5 +16,8 @@
     <ClInclude Include="Time.h" />
     <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="ExponentialMovingAverage.h" />
+    <ClInclude Include="Ship.h" />
+    <ClInclude Include="GameState.h" />
+    <ClInclude Include="ViewState.h" />
   </ItemGroup>
 </Project>
