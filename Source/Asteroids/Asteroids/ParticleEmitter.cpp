@@ -27,7 +27,7 @@ void ParticleEmitter::ResetParticle(Particle& particle, sf::Vertex& vertex)
 {
     float angle = (std::rand() % 3600) * kPi / 1800.f;
     float speed = (std::rand() % 300) + 20.f;
-    particle.deltaPositionPerSecond = sf::Vector2f(std::cosf(angle) * speed, std::sinf(angle) * speed);
+    particle.deltaPositionPerSecond = sf::Vector2f(std::cos(angle) * speed, std::sin(angle) * speed);
 
     particle.remainingDuration = particle.totalDuration = std::chrono::milliseconds(500 + (std::rand() % 1000));
      

@@ -2,8 +2,6 @@
 
 #include "Math.h"
 
-using HeadingRadians = float;
-
 class Ship : public sf::Drawable
 {
 public:
@@ -16,5 +14,5 @@ private:
 
     sf::Vector2f mPosition;
     sf::Vector2f mVelocity;
-    HeadingRadians mHeading = kPi * 3 / 2;
+    Radians mHeading = 0;
 };
