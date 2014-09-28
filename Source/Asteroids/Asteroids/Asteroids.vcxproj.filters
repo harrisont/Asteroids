@@ -19,5 +19,6 @@
     <ClInclude Include="Ship.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="ViewState.h" />
+    <ClInclude Include="Math.h" />
   </ItemGroup>
 </Project>

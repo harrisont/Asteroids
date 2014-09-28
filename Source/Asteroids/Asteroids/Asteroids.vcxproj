@@ -147,6 +147,7 @@ xcopy /d /s /y "$(SolutionDir)..\Asteroids\Fonts" "$(SolutionDir)..\..\Build\$(C
     <ClInclude Include="AsteroidsPCH.h" />
     <ClInclude Include="ExponentialMovingAverage.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="ParticleEmitter.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Ship.h" />
