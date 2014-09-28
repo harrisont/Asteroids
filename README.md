@@ -4,7 +4,7 @@ Top-down space shooter
 
 Dependencies
 ------------
-* SFML
+* SFML 2.1
 
 Building and Running
 --------------------
