@@ -9,6 +9,8 @@
     <ClCompile Include="Ship.cpp" />
     <ClCompile Include="ViewState.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="Asteroid.cpp" />
+    <ClCompile Include="Random.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AsteroidsPCH.h" />
@@ -21,5 +23,7 @@
     <ClInclude Include="ViewState.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="CoreLanguage.h" />
+    <ClInclude Include="Asteroid.h" />
+    <ClInclude Include="Random.h" />
   </ItemGroup>
 </Project>

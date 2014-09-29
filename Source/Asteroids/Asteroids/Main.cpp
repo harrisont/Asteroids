@@ -14,13 +14,6 @@ void ProcessWindowEvents(sf::RenderWindow& window, GameState& /*state*/)
     }
 }
 
-void Update(GameState& state, std::chrono::microseconds elapsedTime)
-{
-    state.ship.Update(elapsedTime);
-
-    state.particleEmitter.Update(elapsedTime);
-}
-
 void RenderWorld(GameState& gameState, ViewState& viewState, const std::chrono::microseconds /*remainingUpdateTime*/)
 {
     // TODO: instead of rendering gameState, render gameState advanced by remainingUpdateTime.
@@ -29,6 +22,10 @@ void RenderWorld(GameState& gameState, ViewState& viewState, const std::chrono::
     view.setCenter(gameState.ship.GetCenter());
     viewState.window.setView(view);
 
+    for (const auto& asteroid : gameState.asteroids)
+    {
+        viewState.window.draw(asteroid);
+    }
     viewState.window.draw(gameState.ship);
     viewState.window.draw(gameState.particleEmitter);
 }
@@ -78,7 +75,7 @@ int main(unsigned int /*argc*/, const char* /*argv*/[])
         unsigned int updateIterationsPerformedThisFrame = 0;
         while (remainingUpdateTime >= kUpdateStepDuration)
         {
-            Update(state, kUpdateStepDuration);
+            UpdateGameState(state, kUpdateStepDuration);
             remainingUpdateTime -= kUpdateStepDuration;
 
             // Ensure that we don't spiral out of control
