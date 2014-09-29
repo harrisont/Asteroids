@@ -58,9 +58,7 @@ void Render(
 
 int main(unsigned int /*argc*/, const char* /*argv*/[])
 {
-    const unsigned int kNumParticles = 5000;
-    GameState state{ kNumParticles };
-
+    GameState state;
     ViewState viewState;
 
     auto previousTime = std::chrono::high_resolution_clock::now();

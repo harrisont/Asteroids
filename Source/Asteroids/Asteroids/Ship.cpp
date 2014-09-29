@@ -1,8 +1,6 @@
 #include "AsteroidsPCH.h"
 #include "Ship.h"
 
-#include "CoreLanguage.h"
-
 void Ship::Update(std::chrono::microseconds elapsedTime)
 {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
